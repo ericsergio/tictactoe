@@ -1,0 +1,28 @@
+body{
+	background-color:#aab;
+}
+
+.grid{
+	display:grid;
+	grid-template-columns:25% 25% 25%;
+	grid-column-gap: 5%;
+	grid-row-gap: 5%;
+	margin: 3% 7% 7% 18%;
+}
+.grid div{
+	background-color:#ffffff;
+	border:solid #000000 2px;
+	text-align: center;
+}
+
+.selected{
+	background-color:#2722AA;
+}
+
+
+
+@media only screen and (max-width:600px) {
+	body {
+		background-color: cyan;
+	}
+}
