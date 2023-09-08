@@ -4,19 +4,41 @@ body{
 
 .grid{
 	display:grid;
-	grid-template-columns:25% 25% 25%;
-	grid-column-gap: 5%;
-	grid-row-gap: 5%;
-	margin: 3% 7% 7% 18%;
+	grid-template-rows:8% 8% 8%;
+	grid-template-columns:8% 8% 8%;
+	grid-column-gap: 0%;
+	grid-row-gap: 0%;
+	margin: 1% 1% 1% 18%;
+	/*transform: translate(0, 230px);*/
 }
+
 .grid div{
 	background-color:#ffffff;
 	border:solid #000000 2px;
 	text-align: center;
+	max-height:50px;
+	min-height:30px;
+	max-width:50px;
+	min-width:30px;
+	color:#ffffff;
 }
+
 
 .selected{
 	background-color:#2722AA;
+}
+
+.grid div h1 {
+	color:#000000;
+}
+
+#titleImage {
+	position: relative;
+	top:0%;
+	left:10%;
+	height:45%;
+	width:45%;
+	margin:0% 14% 2% 6%;
 }
 
 
@@ -24,5 +46,14 @@ body{
 @media only screen and (max-width:600px) {
 	body {
 		background-color: cyan;
+	}
+	.grid{
+		position:relative;
+		top:25%;		
+		display:grid;
+		grid-template-columns:20% 20% 20%;
+		grid-column-gap: 5%;
+		grid-row-gap: 5%;
+		margin: 3% 7% 7% 12%;
 	}
 }

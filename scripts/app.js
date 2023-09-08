@@ -1,7 +1,6 @@
-const localRowHeight = `${(window.outerHeight * .90) / 4}px ${(window.outerHeight * .90) / 4}px ${(window.outerHeight * .90) / 4}px`;
-const localGapVal = `${screen.height * .05}px`;
+const localRowHeight = `${(window.outerHeight * .60) / 4}px ${(window.outerHeight * .60) / 4}px ${(window.outerHeight * .60) / 4}px`;
+const localGapVal = `${screen.height * .01}px`;
 const winningCombos = [[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], [3,5,7]];
-//const columns = [[1,4,7], [2,5,8], [3,6,9]];
 const rows = [[1,2,3],[4,5,6],[7,8,9]];
 
 
@@ -26,7 +25,7 @@ CallCounter.doSelectedCounter = new CallCounter(0);
 Score.newScore = new Score();
 ScoreDiff.newDiff = new ScoreDiff();
 
-function Turn(counter, turnX, turnO, symbol, possibleWinner, currentSequence, possibleWinningPlayer) {
+function Turn(counter, turnX, turnO, symbol, possibleWinner, currentSequence, possibleWinningPlayer, sequenceGroup, winningBoxes) {
     this.possibleWinner = possibleWinner || false;
     this.counter = counter || 0;
     this.turnX = turnX || false;
@@ -35,7 +34,11 @@ function Turn(counter, turnX, turnO, symbol, possibleWinner, currentSequence, po
     this.playerX = "X";
     this.playerO = "O";
     this.currentSequence = currentSequence || null;
+    this.sequenceGroup = []/*sequenceGroup || null*/;
+    this.winningBoxes = [];
     this.possibleWinningPlayer = possibleWinningPlayer || null;
+
+
 }
 
 Turn.checkTurn = new Turn(0, true);
@@ -45,8 +48,6 @@ Turn.prototype.newTurn = function() {
     if(Turn.checkTurn.counter >= 4) {
         $('.grid').children().attr('id', '').each(function() {
             $(this).on("click", function() {
-                //this will pass the currently played box to checkWin as a jquery object in case that is useful
-                /*console.log($(this)[0]);*/
                 checkWin($(this));
             });
         });
@@ -60,8 +61,7 @@ Turn.prototype.newTurn = function() {
         Turn.checkTurn.symbol = "X";
         Turn.checkTurn.turnX = true;
         Turn.checkTurn.turnO = false;
-    }
-    //console.log(`(${Turn.checkTurn.symbol}) Turn counter : ${Turn.checkTurn.counter}:\n\n\n____________________`);
+    }    
 }
 
 $(document).ready(function () {    
@@ -83,7 +83,6 @@ $(document).ready(function () {
         if(Turn.checkTurn.turnO){
             Score.newScore.oScore.push(idx);
         };
-
         doSelected(idx);
     });
 });
@@ -91,8 +90,7 @@ $(document).ready(function () {
 
 function doSelected(idx) {
     var currentIdx = idx;
-    CallCounter.doSelectedCounter.countNumber += 1;
-    //console.log(`CallCounter.doSelectedCounter.countNumber: ${CallCounter.doSelectedCounter.countNumber}`);
+    CallCounter.doSelectedCounter.countNumber += 1;    
     if($('div.selected').siblings().hasClass('selected') && $('div.selected').attr('id') == String(idx)) {
         $('div.selected').siblings().removeClass('selected')
     }
@@ -106,43 +104,43 @@ function doSelected(idx) {
     }
 }
 
-//the last played square is set up and is being passed as a jquery object but isn't currently being used because I am using a different way to keep track of the 
-//sequence but this is just reminding you that it is available via the new turn prototype... Also it does have the non-zero based index in the id.
 function checkWin(/*lastPlayed*/) {
-    ScoreDiff.newDiff.xDiff = [];                       //resets x's difference array each turn
-    ScoreDiff.newDiff.oDiff = [];                       //resets o's difference array each turn
-    CallCounter.checkWinCounter.countNumber += 1;       //will probably remove this, used for debugging.
-    let xEndIdx = Score.newScore.xScore.length - 2;     //used to iterate through difference array for player x - diff array is shorter than played square array by 1
-    let oEndIdx = Score.newScore.oScore.length - 2;     //used to iterate through difference array for player o - diff array is shorter than played square array by 1
-    console.log(`Score.newScore.xScore: ${Score.newScore.xScore}\nScore.newScore.xScore.length - 2: ${Score.newScore.xScore.length - 2}`)
-
-
+    ScoreDiff.newDiff.xDiff = [];
+    ScoreDiff.newDiff.oDiff = [];
+    CallCounter.checkWinCounter.countNumber += 1;
+    let xEndIdx = Score.newScore.xScore.length - 2;
+    let oEndIdx = Score.newScore.oScore.length - 2;
+    
 //----------------------------------------------------------------Turn X------------------------------------------------------------    
     if(Turn.checkTurn.turnX) {
-        Score.newScore.xScore = Score.newScore.xScore.sort();           //sorts x's played square array to get accurate differences between sequential played squares
+        Score.newScore.xScore = Score.newScore.xScore.sort();
+        
         for(let i = 0; i <= xEndIdx; i++) {
-            let next = i + 1;                                           //checking for the winner works by checking for correct differences between played squares. 
-                                                                        //i.e. if a player plays the top three squares then they played squares 1,2, and 3 which will 
-                                                                        //result in the values of 1,1 as an array inside the two dimensional difference array(the diff 
-                                                                        //between 1 and 2 = 1, as well as the diff between 2 and 3 = 1)
+            let next = i + 1;
+
             let diff = Score.newScore.xScore[next] - Score.newScore.xScore[i];
-            Turn.checkTurn.currentSequence = Score.newScore.xScore;     //the current sequence property toggles between player x and o's current array of played squares
+            Turn.checkTurn.currentSequence = Score.newScore.xScore;
+            
             if(diff > 0) {
                 ScoreDiff.newDiff.xDiff.push(diff);
             }
         }
+        
         let xDiffArr = ScoreDiff.newDiff.xDiff;               
-        for(let xDiffIdx = 0;xDiffIdx <= xDiffArr.length;xDiffIdx++) {  //iterate through the diff array for player x            
-            if(xDiffArr[xDiffIdx] === xDiffArr[xDiffIdx + 1]) {         //check whether there is a group of 2 consecutive differences that are equal
-                for(let winCombo in winningCombos) {                    /*there are some combinations in which 2 consecutive differences are equal yet is not a  
-                                                                        winning pattern so check against the constant array of winning squares to eliminate these*/
-                    if(String(Turn.checkTurn.currentSequence) === String(winningCombos[winCombo])) {
-                        Turn.checkTurn.possibleWinner = true;                               //I will be able to remove this **********
-                        Turn.checkTurn.possibleWinningPlayer = Turn.checkTurn.playerX;      //I will be able to remove this **********
+        for(let xDiffIdx = 0;xDiffIdx <= xDiffArr.length;xDiffIdx++) {
+            if(xDiffArr[xDiffIdx] === xDiffArr[xDiffIdx + 1]) {                
+                for(let winCombo in winningCombos) {
+                    getCombos(Turn.checkTurn.currentSequence);
+                    for(let eachSequence = 0; eachSequence < Turn.checkTurn.sequenceGroup.length;eachSequence++) {                        
+                        if(String(Turn.checkTurn.sequenceGroup[eachSequence]) === String(winningCombos[winCombo])) {
+                            Turn.checkTurn.possibleWinner = true;
+                            Turn.checkTurn.possibleWinningPlayer = Turn.checkTurn.playerX;
+                            Turn.checkTurn.winningBoxes = Turn.checkTurn.sequenceGroup[eachSequence];
+                        }
                     }
                 }
             } else {
-                Turn.checkTurn.possibleWinner = false;                  //If there are not 2 matching differences then the game should not end
+                Turn.checkTurn.possibleWinner = false;
             }
         }
     }
@@ -163,8 +161,13 @@ function checkWin(/*lastPlayed*/) {
         
         for(let oDiffIdx = 0;oDiffIdx <= oDiffArr.length - 2;oDiffIdx++) {
             if(oDiffArr[oDiffIdx] === oDiffArr[oDiffIdx + 1]) {
-                Turn.checkTurn.possibleWinner = true;
-                Turn.checkTurn.possibleWinningPlayer = Turn.checkTurn.playerO;
+                for(let winCombo in winningCombos) {
+                                                    
+                    if(String(Turn.checkTurn.currentSequence) === String(winningCombos[winCombo])) {
+                        Turn.checkTurn.possibleWinner = true;
+                        Turn.checkTurn.possibleWinningPlayer = Turn.checkTurn.playerO;
+                    }
+                }
             } else {
                 Turn.checkTurn.possibleWinner = false;
             }
@@ -179,11 +182,67 @@ function checkWin(/*lastPlayed*/) {
     }
 }
 
+function getCombos(playedSequence){
+    //Turn.checkTurn.sequenceGroup = [];
+    //console.log(`playedSequence before fullSequence sort: ${playedSequence}`)
+    let fullSequence = playedSequence.sort();/*Score.newScore.xScore.sort()*/
+    let fullSequenceIdxLength = playedSequence.length;/*Score.newScore.xScore.length*/
+    let shiftNum = fullSequenceIdxLength - 3;
+    let sequences = [];
+    //console.log(shiftNum);
 
+    if(shiftNum === 2) {
+        //sequences.push(playedSequence);
+        runSequence(1, 2, fullSequenceIdxLength, fullSequence);
+        runSequence(2, 3, fullSequenceIdxLength, fullSequence);
+        runSequence(3, 4, fullSequenceIdxLength, fullSequence);
+        //let discard = playedSequence.shift();
+    } else if(shiftNum === 1) {
+        runSequence(1, 2, fullSequenceIdxLength, fullSequence);
+        runSequence(2, 3, fullSequenceIdxLength, fullSequence);
+    } else {
+        runSequence(1, 2, fullSequenceIdxLength, fullSequence);
+    };
+}
 
-
-
-
+function runSequence(m, t, seqLen, seq) {
+    
+    console.log(`m: ${m}, t: ${t}, seqLen: ${seqLen}, seq: ${seq}`);
+    headIdx = 0;
+    let head = seq[headIdx];
+    let count = 0;
+    let count2 = 0;
+    //var midElem;
+    //var tailElem;
+    let sequenceMember = [];
+    for(n = m;n <= seqLen - 2;n++) {
+        count += 1;
+        //console.log(count);
+        let midElem = seq[n];
+        for(i = t;i <= seqLen - 1;i++) {
+            count2 += 1;
+            //console.log(count2);
+            let tailElem = seq[i];
+            if(tailElem !== midElem) {
+                sequenceMember = String([head, midElem, tailElem]);
+                let indicatorBool = false;
+                for(let i = 0;i < Turn.checkTurn.sequenceGroup.length;i++) {
+                    if(sequenceMember === String(Turn.checkTurn.sequenceGroup[i])) {
+                        indicatorBool = true;
+                    }
+                }
+                //if(Turn.checkTurn.sequenceGroup.includes(sequenceMember)) {
+                if(indicatorBool) {
+                    //console.log(`NO:\t This sequence is already in the sequence group: ${sequenceMember}`);
+                } else {
+                    //console.log(`YES:\t This is a new sequence and therefor should be pushed to the sequence group: ${sequenceMember}`)
+                    Turn.checkTurn.sequenceGroup.push(Array(sequenceMember));
+                }
+            }
+        }        
+    }
+    headIdx += 1;
+}
 
 function verifyWinner(sequenceToVerify) {
     let match = false;
@@ -196,7 +255,11 @@ function verifyWinner(sequenceToVerify) {
 }
 
 function doDisplayWinner() {
-    $.each(Turn.checkTurn.currentSequence, function(){
+    $.each(Turn.checkTurn.winningBoxes, function(){ 
         $('.grid').children(`div:eq(${this - 1})`).css('backgroundColor', 'yellow');
-    })
+        /*let boxDivs = document.getElementById("playboard").children;
+        for(eachBox in Turn.checkTurn.winningBoxes) {
+            boxDivs[eachBox].style.backgroundColor = "yellow";
+        }*/
+    });
 }
