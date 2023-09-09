@@ -32,6 +32,14 @@ body{
 	color:#000000;
 }
 
+.winner {
+	position:absolute;
+	top:70%;
+	left:70%;
+	color:#ffffff;
+	background-color:#000000;
+}
+
 #titleImage {
 	position: relative;
 	top:0%;

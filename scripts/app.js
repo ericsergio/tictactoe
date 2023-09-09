@@ -215,33 +215,34 @@ function runSequence(m, t, seqLen, seq) {
     //var midElem;
     //var tailElem;
     let sequenceMember = [];
-    for(n = m;n <= seqLen - 2;n++) {
-        count += 1;
-        //console.log(count);
-        let midElem = seq[n];
-        for(i = t;i <= seqLen - 1;i++) {
-            count2 += 1;
-            //console.log(count2);
-            let tailElem = seq[i];
-            if(tailElem !== midElem) {
-                sequenceMember = String([head, midElem, tailElem]);
-                let indicatorBool = false;
-                for(let i = 0;i < Turn.checkTurn.sequenceGroup.length;i++) {
-                    if(sequenceMember === String(Turn.checkTurn.sequenceGroup[i])) {
-                        indicatorBool = true;
+    for(h = 0;h < seqLen - 3; h++) {
+        for(n = m;n <= seqLen - 2;n++) {
+            count += 1;
+            //console.log(count);
+            let midElem = seq[n];        
+            for(i = t;i <= seqLen - 1;i++) {
+                count2 += 1;
+                //console.log(count2);
+                let tailElem = seq[i];
+                if(tailElem !== midElem) {
+                    sequenceMember = String([seq[h], midElem, tailElem]);
+                    let indicatorBool = false;
+                    for(let i = 0;i < Turn.checkTurn.sequenceGroup.length;i++) {
+                        if(sequenceMember === String(Turn.checkTurn.sequenceGroup[i])) {
+                            indicatorBool = true;
+                        }
+                    }
+                    //if(Turn.checkTurn.sequenceGroup.includes(sequenceMember)) {
+                    if(indicatorBool) {
+                        //console.log(`NO:\t This sequence is already in the sequence group: ${sequenceMember}`);
+                    } else {
+                        //console.log(`YES:\t This is a new sequence and therefor should be pushed to the sequence group: ${sequenceMember}`)
+                        Turn.checkTurn.sequenceGroup.push(Array(sequenceMember));
                     }
                 }
-                //if(Turn.checkTurn.sequenceGroup.includes(sequenceMember)) {
-                if(indicatorBool) {
-                    //console.log(`NO:\t This sequence is already in the sequence group: ${sequenceMember}`);
-                } else {
-                    //console.log(`YES:\t This is a new sequence and therefor should be pushed to the sequence group: ${sequenceMember}`)
-                    Turn.checkTurn.sequenceGroup.push(Array(sequenceMember));
-                }
             }
-        }        
+        }
     }
-    headIdx += 1;
 }
 
 function verifyWinner(sequenceToVerify) {
@@ -262,4 +263,5 @@ function doDisplayWinner() {
             boxDivs[eachBox].style.backgroundColor = "yellow";
         }*/
     });
+    $("body").append(`<p class="winner">Player ${Turn.checkTurn.symbol} Wins!</p>`)
 }
