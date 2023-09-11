@@ -2,27 +2,75 @@ body{
 	background-color:#aab;
 }
 
-.grid{
-	display:grid;
-	grid-template-columns:25% 25% 25%;
-	grid-column-gap: 5%;
-	grid-row-gap: 5%;
-	margin: 3% 7% 7% 18%;
+.verticalLine{
+	position:absolute;	
+	width:3%;
+	background-color:#000000;
 }
-.grid div{
-	background-color:#ffffff;
-	border:solid #000000 2px;
-	text-align: center;
+
+.horizontalLine{
+	position:absolute;
+	height:3%;	
+	background-color:#000000;
 }
 
 .selected{
 	background-color:#2722AA;
 }
 
+.grid div h1 {
+	color:#000000;
+	
+}
 
+.played {
+	position: relative;
+
+}
+
+.winner {
+	position:absolute;
+	top:70%;
+	left:70%;
+	color:#ffffff;
+	background-color:#000000;
+}
+
+/****************************/
+
+
+#titleImage {
+	position: relative;
+	top:0%;
+	left:10%;
+	max-height:25%;
+	min-height:25%;
+	max-width:55%;
+	min-width:25%;
+	/*margin:0% 4% 2% 6%;*/
+	/*border:solid green 2px;*/
+	z-index: 1;
+}
+
+#sideNavBar{
+	border:solid teal 2px;		
+}
+
+
+
+#containerGrid {}
 
 @media only screen and (max-width:600px) {
 	body {
 		background-color: cyan;
+	}
+	.grid{
+		position:relative;
+		top:25%;		
+		display:grid;
+		grid-template-columns:20% 20% 20%;
+		grid-column-gap: 5%;
+		grid-row-gap: 5%;
+		margin: 3% 7% 7% 12%;
 	}
 }
