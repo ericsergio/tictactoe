@@ -1,7 +1,7 @@
 
-const gridBoardHeight = `${window.outerHeight * .3}`;
+const gridBoardHeight = `${window.outerHeight * .4}`;
 const gridBoardWidth = gridBoardHeight;
-const gridRowHeightStr = `${(gridBoardHeight) / 3}px ${(gridBoardHeight) / 3}px ${(gridBoardHeight) / 3}px`;
+const gridRowHeightStr = `${(gridBoardHeight) / 4}px ${(gridBoardHeight) / 4}px ${(gridBoardHeight) / 4}px`;
 const gridColWidthStr = gridRowHeightStr;
 const gridGapVal = `${(gridBoardHeight / 3) * .2}px`;
 const gridDivDimensionStr = `${(gridBoardHeight) / 3}px`
@@ -16,7 +16,7 @@ function Score(xScore, oScore, winner) {
     this.winner = winner || null;
 }
 
-function ScoreDiff(xDiff, oDiff, possibleWin) {
+function ScoreDiff(xDiff, oDiff, possibleWin)  {
     this.possibleWin = possibleWin || false;
     this.xDiff = [];
     this.oDiff = [];
@@ -47,7 +47,7 @@ function Turn(counter, turnX, turnO, symbol, possibleWinner, currentSequence, po
 
 Turn.checkTurn = new Turn(0, true);
 
-Turn.prototype.newTurn = function() {
+Turn.prototype.newTurn = () => {
     Turn.checkTurn.counter++;
     if(Turn.checkTurn.counter >= 4) {
         $('.grid').children().attr('id', '').each(function() {
@@ -69,36 +69,16 @@ Turn.prototype.newTurn = function() {
 }
 
 
-$(document).ready(function () {    
+$(document).ready(() => {    
     for(let i = 1;i <= 9;i++) {
         $('.grid').append(`<div>${i}</div>`);
     }
     $('.grid').css({
-        display:`grid`,
-        marginLeft:`12%`,
         width:`${gridBoardWidth}px`,   //gridBoardWidth is equal to the gridBoardHeight to maintain a proportional board
         height:`${gridBoardHeight}px`, //40%
-        gridTemplateRows:`1fr 1fr 1fr`,//gridRowHeightStr,
-        gridTemplateColumns:`1fr 1fr 1fr`,
         gridRowGap:gridGapVal, 
-        gridColumnGap:gridGapVal,
-        backgroundColor:'cyan'
-
+        gridColumnGap:gridGapVal
     });
-    $('.grid').children().each(function(){
-        $(this).css({
-            backgroundColor:`#aab`,
-            border:`none`,
-            textAlign:`center`,
-            maxHeight:`100%`,
-            maxWidth:`100%`,
-            minHeight:`40%`,
-            minWidth:`40%`,
-            //height:`${gridDivDimensionStr}`,
-            //width:`${gridDivDimensionStr}`,
-            color:`#aab`
-        })
-    })
     $('.grid').children().on("click", function(){
         Turn.prototype.newTurn();
         if($('.selected')) {
@@ -119,7 +99,7 @@ $(document).ready(function () {
 });
 
 
-function doSelected(idx) {
+const doSelected = (idx) => {
     var currentIdx = idx;
     CallCounter.doSelectedCounter.countNumber += 1;    
     if($('div.selected').siblings().hasClass('selected') && $('div.selected').attr('id') == String(idx)) {
@@ -129,9 +109,7 @@ function doSelected(idx) {
     $('div.selected').prepend("<h1 class = 'played'>" + Turn.checkTurn.symbol + "</h1>");
     if(window.outerHeight > window.outerWidth) {
         $(`div.selected`).css('color', 'cyan');
-    }
-
-    
+    };
     if (Turn.checkTurn.symbol === "X") {
         $('div.selected').addClass('x');
     } else {
@@ -139,7 +117,7 @@ function doSelected(idx) {
     }
 }
 
-function checkWin(/*lastPlayed*/) {
+const checkWin = (/*lastPlayed*/) => {
     ScoreDiff.newDiff.xDiff = [];
     ScoreDiff.newDiff.oDiff = [];
     CallCounter.checkWinCounter.countNumber += 1;
@@ -216,14 +194,14 @@ function checkWin(/*lastPlayed*/) {
     }
 }
 
-function getCombos(playedSequence){
+const getCombos = (playedSequence) => {
     let fullSequence = playedSequence.sort();/*Score.newScore.xScore.sort()*/
     let fullSequenceIdxLength = playedSequence.length;/*Score.newScore.xScore.length*/
     let shiftNum = fullSequenceIdxLength - 3;
     runSequence(1, 2, fullSequenceIdxLength, fullSequence);
 }
 
-function runSequence(m, t, seqLen, seq) {    
+const runSequence = (m, t, seqLen, seq) => {    
     console.log(`m: ${m}, t: ${t}, seqLen: ${seqLen}, seq: ${seq}`);
     headIdx = 0;
     let head = seq[headIdx];
@@ -251,7 +229,7 @@ function runSequence(m, t, seqLen, seq) {
     }
 }
 
-function verifyWinner(sequenceToVerify) {
+const verifyWinner = (sequenceToVerify) => {
     let match = false;
     for(let arr of winningCombos) {
         if(arr.toString() === sequenceToVerify.toString())  {
@@ -261,42 +239,9 @@ function verifyWinner(sequenceToVerify) {
     return true;
 }
 
-function doDisplayWinner() {
+const doDisplayWinner = () => {
     $.each(Turn.checkTurn.winningBoxes, function(){
         $('.grid').children(`div:eq(${this - 1})`).css('backgroundColor', 'yellow');
-    });
-    //workaround for the bullshit code above that stopped working for no reason whatsoever
+    });    
     $("body").append(`<p class="winner">Player ${Turn.checkTurn.symbol} Wins!</p>`)
 }
-
-
-
-
-
-/*
-function Orientation(id) {
-    this.id = id;
-};
-
-Orientation.ScreenOrientation = new Orientation(getOrientation());
-
-function getOrientation() {
-    var o = screen.orientation.type;
-    var orien = o.replace('-primary','');
-    if(orien === 'portrait') {
-        return 0;
-    } else {
-        return 1;
-    }
-};
-//window.onload = getOrientation();
-
-$(window).on("orientationchange load", function(event){
-    //$('.col-sm-12').html('<h2>Contact</h2>');
-    var names = ['portrait', 'landscape'];
-    //Orientation.prototype.newOrientation = new Orientation(getOrientation());
-    Orientation.ScreenOrientation = new Orientation(getOrientation());
-    $( "#orientation" ).text( names[Orientation.ScreenOrientation.id] + " mode | Width: " + document.body.clientWidth + "px | Height: " + document.body.clientHeight + "px" );
-});
-
-*/

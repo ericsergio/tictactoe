@@ -1,5 +1,5 @@
 body{
-	background-color:#aab;
+	background-color:#fff;
 }
 
 .verticalLine{
@@ -16,6 +16,26 @@ body{
 
 .selected{
 	background-color:#2722AA;
+}
+
+.grid {
+	display:grid;
+	margin-left: 12%;
+	grid-template-rows: 1fr 1fr 1fr;
+	grid-template-columns: 1fr 1fr 1fr;
+	background-color: #000;
+	box-shadow: 0 30px 20px rgba(0, 0, 0, 0.7);
+}
+
+.grid div{
+	background-color: #afa6a6;
+	border: none;
+	text-align: center;
+	max-height: 100%;
+	max-width: 100%;
+	min-height: 40%;
+	min-width: 40%;
+	color:#afa6a6;	
 }
 
 .grid div h1 {
@@ -52,8 +72,17 @@ body{
 	z-index: 1;
 }
 
-#sideNavBar{
-	border:solid teal 2px;		
+.footerGrid{	
+	position: absolute;
+	top:80vh;
+	height:20vh;
+	width:100vw;
+	border:solid teal 2px;
+}
+
+#navLinks{
+
+	list-style-type: none;
 }
 
 
