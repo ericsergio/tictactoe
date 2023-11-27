@@ -22,6 +22,10 @@ function ScoreDiff(xDiff, oDiff, possibleWin)  {
     this.oDiff = [];
 }
 
+function Board(elem) {
+    this.elem = elem;
+}
+
 function CallCounter(countNumber) {
     this.countNumber = countNumber;    
 }
@@ -68,7 +72,6 @@ Turn.prototype.newTurn = () => {
     }    
 }
 
-
 $(document).ready(() => {    
     for(let i = 1;i <= 9;i++) {
         $('.grid').append(`<div>${i}</div>`);
@@ -79,6 +82,9 @@ $(document).ready(() => {
         gridRowGap:gridGapVal, 
         gridColumnGap:gridGapVal
     });
+    let gridClone = $('.grid').clone(true);
+    Board.initial = new Board(gridClone);
+    
     $('.grid').children().on("click", function(){
         Turn.prototype.newTurn();
         if($('.selected')) {
@@ -108,7 +114,7 @@ const doSelected = (idx) => {
     $('div.selected').attr('id', 'box' + idx);
     $('div.selected').prepend("<h1 class = 'played'>" + Turn.checkTurn.symbol + "</h1>");
     if(window.outerHeight > window.outerWidth) {
-        $(`div.selected`).css('color', 'cyan');
+        $(`div.selected`).css('color', 'none');
     };
     if (Turn.checkTurn.symbol === "X") {
         $('div.selected').addClass('x');
@@ -243,7 +249,20 @@ const doDisplayWinner = () => {
     $.each(Turn.checkTurn.winningBoxes, function(){
         $('.grid').children(`div:eq(${this - 1})`).css('backgroundColor', 'yellow');
     });    
-    $("body").append(`<p class="winner">Player ${Turn.checkTurn.symbol} Wins!</p>`)
+    $("body").append(`<p class="winner">Player ${Turn.checkTurn.symbol} Wins!</p>`);
+    let playedTiles = document.querySelectorAll('.played');
+    console.log(playedTiles.length)
+    let playedTileArr = [];
+    for(let i = 0;i < playedTiles.length;i++) {
+        playedTileArr.push(playedTiles[i])
+    }
+    clearBoard(playedTileArr);
+}
+
+const clearBoard = (tiles) => {
+    $('.grid').remove();
+    $('#toeGameContainer').append(Board.initial.elem);
+    $('.winner').append(`<button id = 'btnRestart'>New Game</button>`)
 }
 
 $(document).ready(function() {

@@ -50,10 +50,28 @@ body{
 
 .winner {
 	position:absolute;
-	top:70%;
-	left:70%;
+	top:30%;
+	left:0%;
+	width:100vw;
+	height:20vh;
 	color:#ffffff;
+	text-align: center;
+	font-size:1.9em;
 	background-color:#000000;
+	padding:12%;
+	opacity: .8;
+}
+
+#btnRestart {
+	position:absolute;
+	top:70%;
+	left:35%;
+	width:145px;
+	height:45px;
+	border-radius: 25%;
+	background-color: blue;
+	font-size: .7em;
+	color:#fff;
 }
 
 
@@ -76,8 +94,8 @@ body{
 
 .footerGrid{	
 	position: absolute;
-	top:85vh;
-	height:15vh;
+	top:80vh;
+	height:10vh;
 	width:100vw;
 	border:solid teal 2px;
 }
@@ -85,7 +103,7 @@ body{
 .contactGrid{
     display:grid;
     position:fixed;
-    top:88vh;
+    top:83vh;
     left:65vw;
     width:40vw;
     grid-template-columns: 1fr 1fr 1fr;
