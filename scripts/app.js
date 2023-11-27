@@ -245,3 +245,16 @@ const doDisplayWinner = () => {
     });    
     $("body").append(`<p class="winner">Player ${Turn.checkTurn.symbol} Wins!</p>`)
 }
+
+$(document).ready(function() {
+    let contactItems = ['mailIcon', 'githubIcon', 'linkedInIcon'];
+    let contactHrefs = ['mailto:ericdsergio87@icloud.com','https://github.com/ericsergio','https://linkedin.com/in/ericsergio']
+    for(let i in contactItems) {
+        $('.contactGrid').append(`
+        <li id = ${contactItems[i]}>
+            <a href = '${contactHrefs[i]}' target="_blank">
+                <img src = '../../assets/icons/${contactItems[i]}.png' alt = '${contactItems[i]} icon png'>
+            </a>
+        </li>`);
+    }
+});

@@ -28,14 +28,14 @@ body{
 }
 
 .grid div{
-	background-color: #afa6a6;
+	background-color: #bdbcbc;
 	border: none;
 	text-align: center;
 	max-height: 100%;
 	max-width: 100%;
 	min-height: 40%;
 	min-width: 40%;
-	color:#afa6a6;	
+	color:#bdbcbc;
 }
 
 .grid div h1 {
@@ -56,6 +56,8 @@ body{
 	background-color:#000000;
 }
 
+
+
 /****************************/
 
 
@@ -63,7 +65,7 @@ body{
 	position: relative;
 	top:0%;
 	left:10%;
-	max-height:25%;
+	max-height:45%;
 	min-height:25%;
 	max-width:55%;
 	min-width:25%;
@@ -74,32 +76,45 @@ body{
 
 .footerGrid{	
 	position: absolute;
-	top:80vh;
-	height:20vh;
+	top:85vh;
+	height:15vh;
 	width:100vw;
 	border:solid teal 2px;
 }
 
-#navLinks{
-
-	list-style-type: none;
+.contactGrid{
+    display:grid;
+    position:fixed;
+    top:88vh;
+    left:65vw;
+    width:40vw;
+    grid-template-columns: 1fr 1fr 1fr;
+    list-style-type:none;
+    z-index: 7;
 }
 
+.contactGrid > li > a > img {
+    max-height:10vh;
+    max-width:6vw;
+	min-height:5vh;
+	min-width:3vw;
+}
 
 
 #containerGrid {}
 
 @media only screen and (max-width:600px) {
-	body {
-		background-color: cyan;
-	}
+
 	.grid{
-		position:relative;
-		top:25%;		
-		display:grid;
-		grid-template-columns:20% 20% 20%;
-		grid-column-gap: 5%;
-		grid-row-gap: 5%;
-		margin: 3% 7% 7% 12%;
+		position: absolute;
+		top:25%;
+		left:0%;
 	}
+	#imgDiv{
+		height:425px;
+		width:700px;
+		margin-top: 10%;
+		margin-left:5%;
+	}
+	#titleImage
 }
