@@ -262,7 +262,10 @@ const doDisplayWinner = () => {
 const clearBoard = (tiles) => {
     $('.grid').remove();
     $('#toeGameContainer').append(Board.initial.elem);
-    $('.winner').append(`<button id = 'btnRestart'>New Game</button>`)
+    $('.winner').append(`<button id = 'btnRestart'>New Game</button>`);
+    $('#btnRestart').on('click', () => {
+        location.reload();
+    });
 }
 
 $(document).ready(function() {
