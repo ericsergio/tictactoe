@@ -20,7 +20,7 @@ body{
 
 .grid {
 	display:grid;
-	margin-left: 12%;
+	margin-left: 8%;
 	grid-template-rows: 1fr 1fr 1fr;
 	grid-template-columns: 1fr 1fr 1fr;
 	background-color: #000;
@@ -66,12 +66,14 @@ body{
 	position:absolute;
 	top:70%;
 	left:35%;
-	width:145px;
+	width:165px;
 	height:45px;
 	border-radius: 25%;
 	background-color: blue;
 	font-size: .7em;
 	color:#fff;
+	box-shadow: 0 30px 20px rgba(0, 0, 0, 0.7);
+	opacity: 1;
 }
 
 
