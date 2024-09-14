@@ -13,13 +13,12 @@ body {
 	background-color:#2722AA;
 }
 
-
 .gridTitle {
 	position: absolute;
 	top:5vh;
 	left:15vw;
 	display:grid;
-	width:65vw;
+	width:35vw;
 	grid-template-columns: 1fr 1fr 1fr;	
 	font-family: 'Lobster', cursive;
 	font-size: 1.5em;
@@ -28,7 +27,7 @@ body {
 }
 
 #tic {
-	transform: rotate(-26deg);
+	transform: rotate(-6deg);
 	color:#2722AA;
 	border-left:ridge 10px #aa2222;
 	border-right:ridge 10px #22aa2b;
@@ -44,7 +43,7 @@ body {
 	padding-left:3vw;
 }
 #toe {
-	transform: rotate(-25deg);
+	transform: rotate(-15deg);
 	color:#15a308;
 	border-left:ridge 10px #1b7a89;
 	border-right:ridge 10px #2d1b89;
@@ -54,11 +53,13 @@ body {
 
 .grid {
 	display:grid;
-	margin: 25vh 8vw 0 8vw;
+	margin: 25vh 8vw 0 20vw;
 	grid-template-rows: 1fr 1fr 1fr;
 	grid-template-columns: 1fr 1fr 1fr;
 	background-color: #000;
 	box-shadow: 0 30px 20px rgba(0, 0, 0, 0.7);
+	width:40vh;
+	height:40vh;
 	/*transform:rotate(34deg);*/
 }
 
@@ -91,23 +92,8 @@ body {
 
 .played {
 	position: relative;
-
 }
 
-/*.graphic{
-	position:absolute;
-	top:35vh;
-	left:5vw;
-	display:block;
-	width:0;
-	height:0;
-	border:12em ridge #05c072;
-	border-top-color:transparent;
-	border-right-color:transparent;
-	border-left-color:transparent;
-	border-bottom-color:600px ridge #f60404;
-	z-index:-1;
-}*/
 
 .winner {
 	position:absolute;
@@ -137,27 +123,11 @@ body {
 	opacity: 1;
 }
 
-
-
 /****************************/
-
-
-#titleImage {
-	position: relative;
-	top:0%;
-	left:3%;
-	max-height:55%;
-	min-height:25%;
-	max-width:65%;
-	min-width:25%;
-	/*margin:0% 4% 2% 6%;*/
-	/*border:solid green 2px;*/
-	z-index: 1;
-}
 
 .footerGrid {	
 	position: absolute;
-	top:90vh;
+	top:85vh;
 	height:10vh;
 	width:100vw;
 	border-top:solid teal 2px;
@@ -166,10 +136,10 @@ body {
 .contactGrid {
     display:grid;
     position:fixed;
-    top:89vh;
+    top:85vh;
     left:0vw;
-    width:100vw;
-    grid-template-columns: 3fr 1fr 1fr 1fr;
+    width:90vw;
+    grid-template-columns: 8fr 1fr 1fr 1fr;
     list-style-type:none;
     z-index: 7;
 }
@@ -181,24 +151,122 @@ body {
 	min-width:3vw;
 }
 
-
-#containerGrid {}
-
-/*@media only screen and (max-width:600px) {
-
-	.grid{
+@media only screen and (orientation: portrait) {
+	.gridTitle {
 		position: absolute;
-		top:25%;
-		left:0%;
+		top:5vh;
+		left:15vw;
+		display:grid;
+		width:65vw;
+		grid-template-columns: 1fr 1fr 1fr;	
+		font-family: 'Lobster', cursive;
+		font-size: 1.5em;
+		margin-left: 2vw;
+		border-bottom:solid 2px #000;
 	}
-	#imgDiv{
-		height:425px;
-		width:700px;
-		margin-top: 10%;
-		margin-left:5%;
+
+	#tic {
+		transform: rotate(-26deg);
+		color:#2722AA;
+		border-left:ridge 10px #aa2222;
+		border-right:ridge 10px #22aa2b;
+		border-radius:30%;
+		padding-left:3vw;
 	}
-	#titleImage {
-		max-height: 30%;
+	#tac {
+		transform: rotate(15deg);
+		color:#880888;
+		border-left:ridge 10px #e3fb09;
+		border-right:ridge 10px #b00c69;
+		border-radius:30%;
+		padding-left:3vw;
+	}
+	#toe {
+		transform: rotate(-25deg);
+		color:#15a308;
+		border-left:ridge 10px #1b7a89;
+		border-right:ridge 10px #2d1b89;
+		border-radius:30%;
+		padding-left:3vw;
+	}
+
+	.grid {
+		margin: 25vh 20vw 0 20vw;
+	}
+
+	.grid div{
+		background-color: #bdbcbc;
+		border: rgb(13, 153, 125) 20px ridge;
+		box-shadow: 0 30px 20px rgba(255, 255, 255, 0.7);
+		transform: rotate(5deg);
+		text-align: center;
+		max-height: 100%;
+		max-width: 100%;
+		min-height: 40%;
+		min-width: 40%;
+		color:#bdbcbc;
+	}
+
+	.footerGrid {	
+		position: absolute;
+		top:90vh;
+		height:10vh;
+		width:100vw;
+		border-top:solid teal 2px;
+	}
+	
+	.contactGrid {
+		display:grid;
+		position:fixed;
+		top:89vh;
+		left:0vw;
+		width:100vw;
+		grid-template-columns: 3fr 1fr 1fr 1fr;
+		list-style-type:none;
+		z-index: 7;
+	}
+	
+	.contactGrid > li > a > img {
+		max-height:8vh;
+		max-width:12vw;
+		min-height:5vh;
+		min-width:3vw;
 	}
 }
-*/
+
+@media only screen and (max-width:600px) {
+
+	.grid {
+		margin: 25vh 8vw 0 18vw;
+	}
+
+	.grid div{
+		background-color: #bdbcbc;
+		border: rgb(13, 153, 125) 20px ridge;
+		box-shadow: 0 30px 20px rgba(255, 255, 255, 0.7);
+		transform: rotate(5deg);
+		text-align: center;
+		max-height: 100%;
+		max-width: 100%;
+		min-height: 40%;
+		min-width: 40%;
+		color:#bdbcbc;
+	}
+
+}
+
+@media only screen and (max-width:500px) {
+
+.grid{
+	margin: 25vh 6vw 0 14vw;
+}
+
+}
+
+@media only screen and (max-width:400px) {
+
+	.grid{
+		margin: 25vh 6vw 0 10vw;
+	}
+
+}

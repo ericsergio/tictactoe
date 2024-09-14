@@ -95,8 +95,8 @@ $(document).ready(() => {
         $('.grid').append(`<div>${i}</div>`);
     }
     $('.grid').css({
-        width:`${gridBoardSide}px`,   //gridBoardWidth is equal to the gridBoardHeight to maintain a proportional board
-        height:`${gridBoardSide}px`,
+        //width:`${gridBoardSide}px`,   //gridBoardWidth is equal to the gridBoardHeight to maintain a proportional board
+        //height:`${gridBoardSide}px`,
         gridRowGap:gridGapVal, 
         gridColumnGap:gridGapVal
     });
