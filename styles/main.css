@@ -17,31 +17,39 @@ body {
 .gridTitle {
 	position: absolute;
 	top:5vh;
+	left:15vw;
 	display:grid;
-	width:60vw;
+	width:65vw;
 	grid-template-columns: 1fr 1fr 1fr;	
 	font-family: 'Lobster', cursive;
-	font-size: 2em;
-	margin-left: 5vw;
+	font-size: 1.5em;
+	margin-left: 2vw;
+	border-bottom:solid 2px #000;
 }
 
 #tic {
-	transform: rotate(-46deg);
+	transform: rotate(-26deg);
 	color:#2722AA;
-	border:dotted 10px #aa2222;
-	padding:5vw;
+	border-left:ridge 10px #aa2222;
+	border-right:ridge 10px #22aa2b;
+	border-radius:30%;
+	padding-left:3vw;
 }
 #tac {
-	transform: rotate(45deg);
+	transform: rotate(15deg);
 	color:#880888;
-	border:dotted 10px #e3fb09;
-	padding:5vw;
+	border-left:ridge 10px #e3fb09;
+	border-right:ridge 10px #b00c69;
+	border-radius:30%;
+	padding-left:3vw;
 }
 #toe {
-	transform: rotate(-45deg);
+	transform: rotate(-25deg);
 	color:#15a308;
-	border:dotted 10px #1b7a89;
-	padding:5vw;
+	border-left:ridge 10px #1b7a89;
+	border-right:ridge 10px #2d1b89;
+	border-radius:30%;
+	padding-left:3vw;
 }
 
 .grid {
@@ -86,7 +94,7 @@ body {
 
 }
 
-.graphic{
+/*.graphic{
 	position:absolute;
 	top:35vh;
 	left:5vw;
@@ -99,7 +107,7 @@ body {
 	border-left-color:transparent;
 	border-bottom-color:600px ridge #f60404;
 	z-index:-1;
-}
+}*/
 
 .winner {
 	position:absolute;
