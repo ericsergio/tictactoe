@@ -29,13 +29,6 @@ class Score {
     }
 }
 
-/*
-function ScoreDiff(xDiff, oDiff, possibleWin)  {
-    this.possibleWin = possibleWin || false;
-    this.xDiff = [];
-    this.oDiff = [];
-}*/
-
 class ScoreDiff {
     constructor(possibleWin, xDiff, oDiff) {
         this.possibleWin = possibleWin || false;
@@ -44,12 +37,6 @@ class ScoreDiff {
     }
 }
 
-
-/*
-function Board(elem) {
-    this.elem = elem;
-}
-*/
 
 class Board {
     constructor(elem) {
@@ -63,6 +50,13 @@ class CallCounter {
     }
 }
 
+class NewGame {
+    constructor(gridClone) {
+        this.gridClone = gridClone;
+
+    }
+}
+
 CallCounter.checkWinCounter = new CallCounter(0);
 CallCounter.doSelectedCounter = new CallCounter(0);
 Score.newScore = new Score();
@@ -71,7 +65,7 @@ ScoreDiff.newDiff = new ScoreDiff();
 
 
 class Turn {
-    constructor(counter, turnX, turnO, symbol, possibleWinner, currentSequence, possibleWinningPlayer, sequenceGroup, winningBoxes) {
+    constructor(counter, turnX, turnO, symbol, possibleWinner, currentSequence, possibleWinningPlayer, sequenceGroup, winningBoxes, gameover) {
         this.possibleWinner = possibleWinner || false;
         this.counter = counter || 0;
         this.turnX = turnX || false;
@@ -83,6 +77,7 @@ class Turn {
         this.sequenceGroup = [];
         this.winningBoxes = [];
         this.possibleWinningPlayer = possibleWinningPlayer || null;
+        this.gameover = gameover || false;
     }
 
     static checkTurn = new Turn(0, true);
@@ -109,52 +104,15 @@ class Turn {
     }
 }
 
+$(document).ready(() => {
+    doGrid();
+});
 
 
-
-//************************  below was my original code prior to refactoring and am temporarily keeping it for reference
-
-/*
-function Turn(counter, turnX, turnO, symbol, possibleWinner, currentSequence, possibleWinningPlayer, sequenceGroup, winningBoxes) {
-    this.possibleWinner = possibleWinner || false;
-    this.counter = counter || 0;
-    this.turnX = turnX || false;
-    this.turnO = turnO || false;
-    this.symbol = symbol;
-    this.playerX = "X";
-    this.playerO = "O";
-    this.currentSequence = currentSequence || null;
-    this.sequenceGroup = [];
-    this.winningBoxes = [];
-    this.possibleWinningPlayer = possibleWinningPlayer || null;
-}
-
-Turn.checkTurn = new Turn(0, true);
-
-Turn.prototype.newTurn = () => {
-    Turn.checkTurn.counter++;
-    if(Turn.checkTurn.counter >= 4) {
-        $('.grid').children().attr('id', '').each(function() {
-            $(this).on("click", function() {
-                checkWin($(this));
-            });
-        });
-    }
-    var indicator = (Turn.checkTurn.counter % 2);
-    if (indicator < 1) {
-        Turn.checkTurn.turnO = true;
-        Turn.checkTurn.turnX = false;
-        Turn.checkTurn.symbol = "O";
-    } else if(indicator > 0){
-        Turn.checkTurn.symbol = "X";
-        Turn.checkTurn.turnX = true;
-        Turn.checkTurn.turnO = false;
-    }
-}
-*/
-
+let doGrid = () => {
 $(document).ready(() => {    
-    for(let i = 1;i <= 9;i++) {
+    
+    for(let i = 1;i <= 9;i++) {        
         $('.grid').append(`<div>${i}</div>`);
     }
     $('.grid').css({
@@ -164,136 +122,127 @@ $(document).ready(() => {
         gridColumnGap:gridGapVal
     });
     let gridClone = $('.grid').clone(true);
-    Board.initial = new Board(gridClone);
-    
-    $('.grid').children().on("click", function(){
-        Turn.prototype.newTurn();
-        if($('.selected')) {
-            $('.selected').removeClass('selected');
-        }
-        $(this).addClass("selected");
-        var idx = Number($('.selected').html());
-        
-        if(Turn.checkTurn.turnX) {
-            Score.newScore.xScore.push(idx);
-        };
-        
-        if(Turn.checkTurn.turnO){
-            Score.newScore.oScore.push(idx);
-        };
-        doSelected(idx);
-    });
+    NewGame.newGame = new NewGame(gridClone);
+    //Board.initial = new Board(gridClone);
+
+        $('.grid').children().on("click", function(){
+            Turn.prototype.newTurn();
+            if($('.selected')) {
+                $('.selected').removeClass('selected');
+            }
+            $(this).addClass("selected");
+            var idx = Number($('.selected').html());
+
+            if(Turn.checkTurn.turnX) {
+                Score.newScore.xScore.push(idx);
+            };
+
+            if(Turn.checkTurn.turnO){
+                Score.newScore.oScore.push(idx);
+            };
+            doSelected(idx);
+        });   
 });
-
-
-const doSelected = (idx) => {
-    CallCounter.doSelectedCounter.countNumber += 1;    
-    if($('div.selected').siblings().hasClass('selected') && $('div.selected').attr('id') == String(idx)) {
-        $('div.selected').siblings().removeClass('selected')
-    }
-    $('div.selected').attr('id', `box${idx}`);
-    $('div.selected').replaceWith(`<div class = 'selected'><h1 class = 'played'>${Turn.checkTurn.symbol}</h1></div>`);
-    if(window.outerHeight > window.outerWidth) {
-        $(`div.selected`).css('color', 'none');
-    };
-    if (Turn.checkTurn.symbol === "X") {
-        $('div.selected').addClass('x');
-    } else {
-        $('div.selected').addClass('o');
-    }
-    
 }
 
-
-//Bug: Turn.checkTurn.possibleWinner is not being set to true in the checkWin function
+const doSelected = (idx) => {
+    if(!Turn.checkTurn.gameover) {
+        CallCounter.doSelectedCounter.countNumber += 1;    
+        if($('div.selected').siblings().hasClass('selected') && $('div.selected').attr('id') == String(idx)) {
+            $('div.selected').siblings().removeClass('selected')
+        }
+        $('div.selected').attr('id', `box${idx}`);
+        $('div.selected').replaceWith(`<div class = 'selected'><h1 class = 'played'>${Turn.checkTurn.symbol}</h1></div>`);
+        if(window.outerHeight > window.outerWidth) {
+            $(`div.selected`).css('color', 'none');
+        };
+        if (Turn.checkTurn.symbol === "X") {
+            $('div.selected').addClass('x');
+        } else {
+            $('div.selected').addClass('o');
+        }
+    }
+}
 
 const checkWin = (/*lastPlayed*/) => {
     ScoreDiff.newDiff.xDiff = [];
     ScoreDiff.newDiff.oDiff = [];
     CallCounter.checkWinCounter.countNumber += 1;
     let xEndIdx = Score.newScore.xScore.length - 2;
-    let oEndIdx = Score.newScore.oScore.length - 2;
-    //console.log(`+++++++++++++++++++++++++${Turn.checkTurn.currentSequence.length}`)
+    let oEndIdx = Score.newScore.oScore.length - 2;    
     
 //----------------------------------------------------------------Turn X------------------------------------------------------------    
     if(Turn.checkTurn.turnX) {
-        Score.newScore.xScore = Score.newScore.xScore.sort();
+        if(!Turn.checkTurn.gameover) {
+            Score.newScore.xScore = Score.newScore.xScore.sort();
 
-        for(let i = 0; i <= xEndIdx; i++) {
-            let next = i + 1;
-            let diff = Score.newScore.xScore[next] - Score.newScore.xScore[i];
-            Turn.checkTurn.currentSequence = Score.newScore.xScore;
-            //console.log(`+++++++++++++++++++++++++${Turn.checkTurn.currentSequence.length}`)
-            if(Turn.checkTurn.currentSequence.length >= 3 && Turn.checkTurn.turnX) {
-                console.log('This might be somewhat useless anyways but why the fuck isnt it working');
-                Turn.checkTurn.possibleWinner = true;
-                console.log(`Turn.checkTurn.possibleWinner: ${Turn.checkTurn.possibleWinner}`)
-            } else {
-                console.log(`ok so Turn.checkTurn.currentSequence.length is: ${Turn.checkTurn.currentSequence.length} and Turn.checkTurn.turnX is: ${Turn.checkTurn.turnX}`)
+            for(let i = 0; i <= xEndIdx; i++) {
+                let next = i + 1;
+                let diff = Score.newScore.xScore[next] - Score.newScore.xScore[i];
+                Turn.checkTurn.currentSequence = Score.newScore.xScore;
+                if(Turn.checkTurn.currentSequence.length >= 3 && Turn.checkTurn.turnX) {                    
+                    Turn.checkTurn.possibleWinner = true;                    
+                }
+                if(diff > 0) {
+                    ScoreDiff.newDiff.xDiff.push(diff);
+                }
             }
-            if(diff > 0) {
-                ScoreDiff.newDiff.xDiff.push(diff);
-            }
-        }
-        
-        let xDiffArr = ScoreDiff.newDiff.xDiff;               
-        for(let xDiffIdx = 0;xDiffIdx <= xDiffArr.length;xDiffIdx++) {
-            //if the current indexed difference is equal to the next indexed difference
-            if(xDiffArr[xDiffIdx] === xDiffArr[xDiffIdx + 1]) {
-                for(let winCombo in winningCombos) {
-                    getCombos(Turn.checkTurn.currentSequence);
-                    for(let eachSequence = 0; eachSequence < Turn.checkTurn.sequenceGroup.length;eachSequence++) {                        
-                        if(String(Turn.checkTurn.sequenceGroup[eachSequence]) === String(winningCombos[winCombo])) {
-                            Turn.checkTurn.possibleWinner = true;                            
-                            Turn.checkTurn.possibleWinningPlayer = Turn.checkTurn.playerX;
-                            Turn.checkTurn.winningBoxes = Turn.checkTurn.sequenceGroup[eachSequence];
+
+            let xDiffArr = ScoreDiff.newDiff.xDiff;               
+            for(let xDiffIdx = 0;xDiffIdx <= xDiffArr.length;xDiffIdx++) {
+                //if the current indexed difference is equal to the next indexed difference
+                if(xDiffArr[xDiffIdx] === xDiffArr[xDiffIdx + 1]) {
+                    for(let winCombo in winningCombos) {
+                        getCombos();
+                        for(let eachSequence = 0; eachSequence < Turn.checkTurn.sequenceGroup.length;eachSequence++) {                        
+                            if(String(Turn.checkTurn.sequenceGroup[eachSequence]) === String(winningCombos[winCombo])) {
+                                Turn.checkTurn.possibleWinner = true;                            
+                                Turn.checkTurn.possibleWinningPlayer = Turn.checkTurn.playerX;
+                                Turn.checkTurn.winningBoxes = Turn.checkTurn.sequenceGroup[eachSequence];
+                            }
                         }
                     }
                 }
-            } else {
-                //Turn.checkTurn.possibleWinner = false;
             }
         }
     }
 //------------------------------------------------------------End-Turn-X------------------------------------------------------------
 //----------------------------------------------------------------Turn O------------------------------------------------------------
     if(Turn.checkTurn.turnO) {
-        Score.newScore.oScore = Score.newScore.oScore.sort();
-        for(let i = 0; i <= oEndIdx; i++) {
-            let next = i + 1;
-            let diff = Score.newScore.oScore[next] - Score.newScore.oScore[i];
-            Turn.checkTurn.currentSequence = Score.newScore.oScore;
-            if(Turn.checkTurn.currentSequence.length >= 3 && Turn.checkTurn.turnO) {
-                Turn.checkTurn.possibleWinner = true;
+        if(!Turn.checkTurn.gameover) {
+            Score.newScore.oScore = Score.newScore.oScore.sort();
+            for(let i = 0; i <= oEndIdx; i++) {
+                let next = i + 1;
+                let diff = Score.newScore.oScore[next] - Score.newScore.oScore[i];
+                Turn.checkTurn.currentSequence = Score.newScore.oScore;
+                if(Turn.checkTurn.currentSequence.length >= 3 && Turn.checkTurn.turnO) {
+                    Turn.checkTurn.possibleWinner = true;
+                }
+                if(diff > 0) {
+                    ScoreDiff.newDiff.oDiff.push(diff);
+                }
             }
-            if(diff > 0) {
-                ScoreDiff.newDiff.oDiff.push(diff);
-            }
-        }
-        
-        let oDiffArr = ScoreDiff.newDiff.oDiff;
-        for(let oDiffIdx = 0;oDiffIdx <= oDiffArr.length;oDiffIdx++) {            
-            if(oDiffArr[oDiffIdx] === oDiffArr[oDiffIdx + 1]) {
-                for(let winCombo in winningCombos) {
-                    getCombos(Turn.checkTurn.currentSequence);
-                    for(let eachSequence = 0; eachSequence < Turn.checkTurn.sequenceGroup.length;eachSequence++) {
-                        //If this is true, someone will have already won
-                        if(String(Turn.checkTurn.sequenceGroup[eachSequence]) === String(winningCombos[winCombo])) {
-                            Turn.checkTurn.possibleWinner = true;
-                            Turn.checkTurn.possibleWinningPlayer = Turn.checkTurn.playerO;
-                            Turn.checkTurn.winningBoxes = Turn.checkTurn.sequenceGroup[eachSequence];
+
+            let oDiffArr = ScoreDiff.newDiff.oDiff;
+            for(let oDiffIdx = 0;oDiffIdx <= oDiffArr.length;oDiffIdx++) {            
+                if(oDiffArr[oDiffIdx] === oDiffArr[oDiffIdx + 1]) {
+                    for(let winCombo in winningCombos) {
+                        getCombos();
+                        for(let eachSequence = 0; eachSequence < Turn.checkTurn.sequenceGroup.length;eachSequence++) {
+                            //If this is true, someone will have already won
+                            if(String(Turn.checkTurn.sequenceGroup[eachSequence]) === String(winningCombos[winCombo])) {
+                                Turn.checkTurn.possibleWinner = true;
+                                Turn.checkTurn.possibleWinningPlayer = Turn.checkTurn.playerO;
+                                Turn.checkTurn.winningBoxes = Turn.checkTurn.sequenceGroup[eachSequence];
+                            }
                         }
                     }
                 }
-            } else {
-                //Turn.checkTurn.possibleWinner = false;
             }
-        }        
+        }
     }
 //------------------------------------------------------------End-Turn-O------------------------------------------------------------
 
-
-//Turn.checkTurn.possibleWinner is set to false by default and is not being set to true in the checkWin function so this is broken until that gets fixed
     if(Turn.checkTurn.possibleWinner) {
         if (verifyWinner(Turn.checkTurn.currentSequence)) {
             Score.newScore.winner = Turn.checkTurn.symbol;
@@ -302,24 +251,16 @@ const checkWin = (/*lastPlayed*/) => {
     }
 }
 
-//played sequence is the current player's sequence (Turn.checkTurn.currentSequence)
-//why am i using this param when i can access it using Turn.checkTurn.currentSequence?
-const getCombos = (playedSequence) => {
-    //let fullSequence = playedSequence.sort();/*Score.newScore.xScore.sort()*/
-    let fullSequence = Turn.checkTurn.currentSequence.sort();
-    //let fullSequenceIdxLength = playedSequence.length;/*Score.newScore.xScore.length*/
+const getCombos = () => {
+    let fullSequence = Turn.checkTurn.currentSequence.sort();    
     let fullSequenceIdxLength = Turn.checkTurn.currentSequence.length;
-    //what is this  
-    //let shiftNum = fullSequenceIdxLength - 3;
     runSequence(1, 2, fullSequenceIdxLength, fullSequence);
 }
 
 // why am i passing m and t when they are static values?
-//This is where player o is not getting the sequence group array values, only player x is
 const runSequence = (m, t, seqLen, seq) => {    
     console.log(`m: ${m}, t: ${t}, seqLen: ${seqLen}, seq: ${seq}`);
     headIdx = 0;
-    let head = seq[headIdx];
     let sequenceMember = [];    
     for(h = 0;h <= seqLen - 3; h++) {
         for(n = m;n <= seqLen - 2;n++) {
@@ -357,42 +298,58 @@ const verifyWinner = (sequenceToVerify) => {
 
 //TO DO: refactor and use a promise to display winning sequence and restart game without reloading page
 const doDisplayWinner = () => {
-    $.each(Turn.checkTurn.winningBoxes, function(){        
-        //$('.grid').children(`div:eq(${this - 1})`).css('backgroundColor', 'yellow');
-        //console.log(`<><><><><>${$('.grid').children(`div:eq(${Number(this) - 1})`)}`)
-        //console.log()
-    });
+    if(!Turn.checkTurn.gameover) {
+        let winBoxes = [];
+        let gridParent = document.getElementById('playboard');
+        let wonBoxes = Turn.checkTurn.winningBoxes[0].split(',');
+        for(let i = 0;i <= wonBoxes.length - 1;i++) {
+            winBoxes.push(gridParent.children[Number(wonBoxes[i]) - 1]);
+            console.log(winBoxes[i]);
+        }
+        for(let eachBox in winBoxes) {
+            winBoxes[eachBox].style.backgroundColor = 'yellow';
+        }
+        $("body").append(`<p class="winner">Player ${Turn.checkTurn.symbol} Wins!</p>`);
+        $('.winner').append(`<button id = 'btnRestart'>New Game?</button>`);
+    }
+    Turn.checkTurn.gameover = true;
+    
 
-    let winBoxes = [];
-    let gridParent = document.getElementById('playboard');
-    let wonBoxes = Turn.checkTurn.winningBoxes[0].split(',');
-    for(let i = 0;i <= wonBoxes.length - 1;i++) {
-        winBoxes.push(gridParent.children[Number(wonBoxes[i]) - 1]);
-        //console.log(`${Number((Turn.checkTurn.winningBoxes[0].split(',')[i]) - 1)}`)
-        console.log(winBoxes[i]);
-    }
-    for(let eachBox in winBoxes) {
-        winBoxes[eachBox].style.backgroundColor = 'yellow';
-    }
-    //$("body").append(`<p class="winner">Player ${Turn.checkTurn.symbol} Wins!</p>`);
     let playedTiles = document.querySelectorAll('.played');    
     let playedTileArr = [];
     for(let i = 0;i < playedTiles.length;i++) {
         playedTileArr.push(playedTiles[i])
     }
-    //clearBoard(playedTileArr);
-}
-
-const clearBoard = (tiles) => {
-    $('.grid').remove();
-    $('#toeGameContainer').append(Board.initial.elem);
-    $('.winner').append(`<button id = 'btnRestart'>New Game</button>`);
-    $('#btnRestart').on('click', () => {
-        location.reload();
+    $('#btnRestart').on('click', () => {    
+        Turn.checkTurn.gameover = false;        
+        $('.winner').remove();
+        Turn.checkTurn.counter = 0;
+        Turn.checkTurn.turnX = true;
+        Turn.checkTurn.turnO = false;
+        Turn.checkTurn.symbol = "X";
+        Turn.checkTurn.possibleWinner = false;
+        Turn.checkTurn.currentSequence = null;
+        Turn.checkTurn.possibleWinningPlayer = null;
+        Turn.checkTurn.sequenceGroup = [];
+        Score.newScore.xScore = [];
+        Score.newScore.oScore = [];
+        Score.newScore.winner = null;
+        Turn.checkTurn.winningBoxes = [];
+        ScoreDiff.newDiff.xDiff = [];
+        ScoreDiff.newDiff.oDiff = [];
+        CallCounter.checkWinCounter.countNumber = 0;
+        $('.grid').children().remove();
+        doGrid();
     });
 }
 
-//Should probably just put this in the html file
+const clearBoard = (tiles) => {
+    
+    //$('#toeGameContainer').append(Board.initial.elem);
+    
+
+}
+
 $(document).ready(function() {
     let contactItems = ['mailIcon', 'githubIcon', 'linkedInIcon'];
     let contactHrefs = ['mailto:ericdsergio87@icloud.com','https://github.com/ericsergio','https://linkedin.com/in/ericsergio']

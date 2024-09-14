@@ -42,22 +42,22 @@ body {
 
 .winner {
 	position:absolute;
-	top:30%;
+	top:55%;
 	left:0%;
 	width:100vw;
-	height:20vh;
+	height:30vh;
 	color:#ffffff;
 	text-align: center;
 	font-size:1.9em;
 	background-color:#000000;
 	padding:12%;
-	opacity: .8;
+	opacity: .6;
 }
 
 #btnRestart {
 	position:absolute;
-	top:70%;
-	left:35%;
+	top:62%;
+	left:27%;
 	width:165px;
 	height:45px;
 	border-radius: 25%;
