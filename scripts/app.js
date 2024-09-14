@@ -1,15 +1,3 @@
-/*
-I am working on improving and documenting my code, including the algorithm I created for the game's logic found in the runSequence method
-on roughly line 212. The goal of this project is to build the game algorithmically, the constant "winningCombos" is only used to
-verify the winning player's sequence, not determine it. The algorithm uses the differences of the 3 played tiles indexes which I found
-contains a pattern of two consecutive like values from 1 to 4. For example, the sequence of 1,5,9 which is a winning sequence that starts
-in the top-left corner and runs diagonally down and to the right contains two differences of 4 i.e. 1 (+4), 5 (+4), 9. This is true for
-the sequences [1,4,7], [2,5,8] and [3,6,9] which represent a winning combination going straight down starting at any of the three 
-top squares, all which contain the same consecutive difference of 3. 
-
-**also, I found a bug in the game's logic that affects player O's sequence not being recognized in a small number of winning scenarios.
-This will be fixed soon.
-*/
 const gridBoardHeight = `${window.innerHeight * .4}`;
 const gridBoardWidth = gridBoardHeight;
 const gridRowHeightStr = `${(gridBoardHeight) / 4}px ${(gridBoardHeight) / 4}px ${(gridBoardHeight) / 4}px`;
@@ -18,8 +6,6 @@ const gridGapVal = `${(gridBoardHeight / 3) * .2}px`;
 const gridDivDimensionStr = `${(gridBoardHeight) / 3}px`
 const winningCombos = [[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], [3,5,7]];
 const rows = [[1,2,3],[4,5,6],[7,8,9]];
-
-
 
 class Score {
     constructor(xScore, oScore, winner) {
@@ -36,7 +22,6 @@ class ScoreDiff {
         this.oDiff = [];
     }
 }
-
 
 class Board {
     constructor(elem) {
@@ -61,8 +46,6 @@ CallCounter.checkWinCounter = new CallCounter(0);
 CallCounter.doSelectedCounter = new CallCounter(0);
 Score.newScore = new Score();
 ScoreDiff.newDiff = new ScoreDiff();
-
-
 
 class Turn {
     constructor(counter, turnX, turnO, symbol, possibleWinner, currentSequence, possibleWinningPlayer, sequenceGroup, winningBoxes, gameover) {
