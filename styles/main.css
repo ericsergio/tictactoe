@@ -6,25 +6,13 @@ body {
 	background-color:#fff;
 }
 
-.verticalLine {
-	position:absolute;	
-	width:3%;
-	background-color:#000000;
-}
-
-.horizontalLine {
-	position:absolute;
-	height:3%;	
-	background-color:#000000;
-}
-
 .selected {
 	background-color:#2722AA;
 }
 
 .grid {
 	display:grid;
-	margin: 0 calc(100vh * .3) 0 calc(100vh * .3);
+	margin: 15%;
 	grid-template-rows: 1fr 1fr 1fr;
 	grid-template-columns: 1fr 1fr 1fr;
 	background-color: #000;
