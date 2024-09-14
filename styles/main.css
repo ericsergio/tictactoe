@@ -1,26 +1,30 @@
-body{
+* {
+	box-sizing: border-box;
+}
+
+body {
 	background-color:#fff;
 }
 
-.verticalLine{
+.verticalLine {
 	position:absolute;	
 	width:3%;
 	background-color:#000000;
 }
 
-.horizontalLine{
+.horizontalLine {
 	position:absolute;
 	height:3%;	
 	background-color:#000000;
 }
 
-.selected{
+.selected {
 	background-color:#2722AA;
 }
 
 .grid {
 	display:grid;
-	margin-left: 8%;
+	margin: 0 calc(100vh * .3) 0 calc(100vh * .3);
 	grid-template-rows: 1fr 1fr 1fr;
 	grid-template-columns: 1fr 1fr 1fr;
 	background-color: #000;
@@ -94,28 +98,28 @@ body{
 	z-index: 1;
 }
 
-.footerGrid{	
+.footerGrid {	
 	position: absolute;
-	top:80vh;
+	top:90vh;
 	height:10vh;
 	width:100vw;
-	border:solid teal 2px;
+	border-top:solid teal 2px;
 }
 
-.contactGrid{
+.contactGrid {
     display:grid;
     position:fixed;
-    top:83vh;
-    left:65vw;
-    width:40vw;
-    grid-template-columns: 1fr 1fr 1fr;
+    top:89vh;
+    left:0vw;
+    width:100vw;
+    grid-template-columns: 3fr 1fr 1fr 1fr;
     list-style-type:none;
     z-index: 7;
 }
 
 .contactGrid > li > a > img {
-    max-height:10vh;
-    max-width:6vw;
+    max-height:8vh;
+    max-width:12vw;
 	min-height:5vh;
 	min-width:3vw;
 }
@@ -123,7 +127,7 @@ body{
 
 #containerGrid {}
 
-@media only screen and (max-width:600px) {
+/*@media only screen and (max-width:600px) {
 
 	.grid{
 		position: absolute;
@@ -136,5 +140,8 @@ body{
 		margin-top: 10%;
 		margin-left:5%;
 	}
-	#titleImage
+	#titleImage {
+		max-height: 30%;
+	}
 }
+*/
