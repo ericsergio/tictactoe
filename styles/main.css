@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
 * {
 	box-sizing: border-box;
 }
@@ -10,18 +13,52 @@ body {
 	background-color:#2722AA;
 }
 
+
+.gridTitle {
+	position: absolute;
+	top:5vh;
+	display:grid;
+	width:60vw;
+	grid-template-columns: 1fr 1fr 1fr;	
+	font-family: 'Lobster', cursive;
+	font-size: 2em;
+	margin-left: 5vw;
+}
+
+#tic {
+	transform: rotate(-46deg);
+	color:#2722AA;
+	border:dotted 10px #aa2222;
+	padding:5vw;
+}
+#tac {
+	transform: rotate(45deg);
+	color:#880888;
+	border:dotted 10px #e3fb09;
+	padding:5vw;
+}
+#toe {
+	transform: rotate(-45deg);
+	color:#15a308;
+	border:dotted 10px #1b7a89;
+	padding:5vw;
+}
+
 .grid {
 	display:grid;
-	margin: 15%;
+	margin: 25vh 8vw 0 8vw;
 	grid-template-rows: 1fr 1fr 1fr;
 	grid-template-columns: 1fr 1fr 1fr;
 	background-color: #000;
 	box-shadow: 0 30px 20px rgba(0, 0, 0, 0.7);
+	/*transform:rotate(34deg);*/
 }
 
 .grid div{
 	background-color: #bdbcbc;
-	border: none;
+	border: rgb(13, 153, 125) 20px ridge;
+	box-shadow: 0 30px 20px rgba(255, 255, 255, 0.7);
+	transform: rotate(5deg);
 	text-align: center;
 	max-height: 100%;
 	max-width: 100%;
@@ -30,14 +67,38 @@ body {
 	color:#bdbcbc;
 }
 
+.grid div:nth-child(2n + 1):nth-child(-n + 7) {
+	border: rgb(245, 89, 28) 20px ridge;
+	transform: rotate(-5deg);
+  }
+
+.grid div:nth-child(2n-1 + 1):nth-child(-n + n) {
+	border: rgb(33, 132, 232) 20px ridge;
+  }
+
 .grid div h1 {
 	color:#000000;
-	
+	font-family: 'Dancing Script', cursive;
 }
 
 .played {
 	position: relative;
 
+}
+
+.graphic{
+	position:absolute;
+	top:35vh;
+	left:5vw;
+	display:block;
+	width:0;
+	height:0;
+	border:12em ridge #05c072;
+	border-top-color:transparent;
+	border-right-color:transparent;
+	border-left-color:transparent;
+	border-bottom-color:600px ridge #f60404;
+	z-index:-1;
 }
 
 .winner {

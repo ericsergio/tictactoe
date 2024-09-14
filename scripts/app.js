@@ -1,9 +1,6 @@
-const gridBoardHeight = `${window.innerHeight * .4}`;
-const gridBoardWidth = gridBoardHeight;
-const gridRowHeightStr = `${(gridBoardHeight) / 4}px ${(gridBoardHeight) / 4}px ${(gridBoardHeight) / 4}px`;
-const gridColWidthStr = gridRowHeightStr;
-const gridGapVal = `${(gridBoardHeight / 3) * .2}px`;
-const gridDivDimensionStr = `${(gridBoardHeight) / 3}px`
+const multiplier = .5;
+const gridBoardSide = `${window.innerHeight * multiplier}`;
+const gridGapVal = `${(gridBoardSide / 8) * .2}px`;
 const winningCombos = [[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], [3,5,7]];
 const rows = [[1,2,3],[4,5,6],[7,8,9]];
 
@@ -93,21 +90,18 @@ $(document).ready(() => {
 
 
 let doGrid = () => {
-$(document).ready(() => {    
-    
+$(document).ready(() => {
     for(let i = 1;i <= 9;i++) {        
         $('.grid').append(`<div>${i}</div>`);
     }
     $('.grid').css({
-        width:`${gridBoardWidth}px`,   //gridBoardWidth is equal to the gridBoardHeight to maintain a proportional board
-        height:`${gridBoardHeight}px`, //40%
+        width:`${gridBoardSide}px`,   //gridBoardWidth is equal to the gridBoardHeight to maintain a proportional board
+        height:`${gridBoardSide}px`,
         gridRowGap:gridGapVal, 
         gridColumnGap:gridGapVal
     });
     let gridClone = $('.grid').clone(true);
-    NewGame.newGame = new NewGame(gridClone);
-    //Board.initial = new Board(gridClone);
-
+    NewGame.newGame = new NewGame(gridClone);    
         $('.grid').children().on("click", function(){
             Turn.prototype.newTurn();
             if($('.selected')) {
@@ -125,7 +119,7 @@ $(document).ready(() => {
             };
             doSelected(idx);
         });   
-});
+    });
 }
 
 const doSelected = (idx) => {
@@ -147,7 +141,7 @@ const doSelected = (idx) => {
     }
 }
 
-const checkWin = (/*lastPlayed*/) => {
+const checkWin = () => {
     ScoreDiff.newDiff.xDiff = [];
     ScoreDiff.newDiff.oDiff = [];
     CallCounter.checkWinCounter.countNumber += 1;
@@ -240,9 +234,7 @@ const getCombos = () => {
     runSequence(1, 2, fullSequenceIdxLength, fullSequence);
 }
 
-// why am i passing m and t when they are static values?
-const runSequence = (m, t, seqLen, seq) => {    
-    console.log(`m: ${m}, t: ${t}, seqLen: ${seqLen}, seq: ${seq}`);
+const runSequence = (m, t, seqLen, seq) => {
     headIdx = 0;
     let sequenceMember = [];    
     for(h = 0;h <= seqLen - 3; h++) {
@@ -286,8 +278,7 @@ const doDisplayWinner = () => {
         let gridParent = document.getElementById('playboard');
         let wonBoxes = Turn.checkTurn.winningBoxes[0].split(',');
         for(let i = 0;i <= wonBoxes.length - 1;i++) {
-            winBoxes.push(gridParent.children[Number(wonBoxes[i]) - 1]);
-            console.log(winBoxes[i]);
+            winBoxes.push(gridParent.children[Number(wonBoxes[i]) - 1]);            
         }
         for(let eachBox in winBoxes) {
             winBoxes[eachBox].style.backgroundColor = 'yellow';
